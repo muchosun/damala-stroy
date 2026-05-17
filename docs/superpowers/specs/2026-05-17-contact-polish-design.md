@@ -39,7 +39,7 @@ We will keep the current page structure and visual language, then add a restrain
 
 All previous versions must remain recoverable.
 
-Implementation will use:
+Implementation will use Git as the single source of truth:
 
 - **Git history** for every meaningful stage.
 - **Explicit checkpoint commits** before and after each notable change.
@@ -47,11 +47,10 @@ Implementation will use:
   - `v0-original-published`
   - `v1-contact-polish`
   - future tags for later milestones
-- **Snapshot files** in a dedicated archive directory when useful for quick visual reference.
 
 Rollback requirement:
 
-- It must always be possible to restore:
+- It must always be possible to restore from Git:
   1. the original published landing page,
   2. any tagged milestone,
   3. any intermediate commit if needed.
