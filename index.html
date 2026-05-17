@@ -51,7 +51,9 @@
       backdrop-filter: blur(20px);
       border-radius: 999px;
       box-shadow: 0 20px 70px rgba(0,0,0,.35);
+      transition: padding .25s ease, top .25s ease, background .25s ease;
     }
+    .topbar.is-scrolled { top: 10px; padding: 10px 14px; background: rgba(8,9,10,.86); }
 
     .brand { display: flex; align-items: center; gap: 12px; letter-spacing: .28em; }
     .brand-mark {
@@ -64,7 +66,41 @@
     .brand span { display:block; font-size: 9px; color: var(--muted); margin-top: 2px; }
 
     .nav { display: flex; gap: 22px; color: var(--muted); font-size: 13px; }
+    .header-actions { display:flex; align-items:center; gap:10px; }
+    .contact-icon {
+      width: 42px; height: 42px; border-radius: 999px;
+      display:grid; place-items:center;
+      border:1px solid var(--white-line);
+      background: rgba(255,255,255,.04);
+      color: var(--gold-2);
+      transition: transform .2s ease, border-color .2s ease, background .2s ease;
+    }
+    .contact-icon:hover { transform: translateY(-1px); border-color: var(--line); background: rgba(215,168,95,.12); }
+    .contact-icon svg { width: 19px; height: 19px; }
     .phone { padding: 11px 16px; border-radius: 999px; background: #f6efe0; color: #0a0a0a; font-weight: 800; }
+    .menu-toggle {
+      display:none; width:42px; height:42px; border-radius:999px;
+      border:1px solid var(--white-line); background: rgba(255,255,255,.04); color: var(--text);
+      cursor:pointer; place-items:center; padding:0;
+    }
+    .menu-toggle span, .menu-toggle span:before, .menu-toggle span:after {
+      content:""; display:block; width:16px; height:2px; background: currentColor; border-radius:999px; position:relative;
+      transition: transform .2s ease, opacity .2s ease, top .2s ease;
+    }
+    .menu-toggle span:before { position:absolute; top:-6px; }
+    .menu-toggle span:after { position:absolute; top:6px; }
+    .menu-toggle[aria-expanded="true"] span { background: transparent; }
+    .menu-toggle[aria-expanded="true"] span:before { top:0; transform: rotate(45deg); }
+    .menu-toggle[aria-expanded="true"] span:after { top:0; transform: rotate(-45deg); }
+    .mobile-menu {
+      position: fixed; z-index: 29; top: 82px; left: 50%; transform: translateX(-50%) translateY(-10px);
+      width: calc(100% - 20px); padding: 12px; border-radius: 26px;
+      border:1px solid var(--white-line); background: rgba(8,9,10,.9); backdrop-filter: blur(18px);
+      display:grid; gap:8px; opacity:0; pointer-events:none; transition: opacity .2s ease, transform .2s ease;
+    }
+    .mobile-menu.is-open { opacity:1; pointer-events:auto; transform: translateX(-50%) translateY(0); }
+    .mobile-menu a { padding:14px 16px; border-radius:18px; color: var(--muted); background: rgba(255,255,255,.03); }
+    .mobile-contact-bar { display:none; }
 
     .hero { position: relative; min-height: 100vh; display: grid; align-items: center; padding: 120px 0 70px; }
     .hero-grid { display: grid; grid-template-columns: 1.02fr .98fr; gap: 38px; align-items: center; }
@@ -175,7 +211,8 @@
     @media (max-width: 560px) {
       .page { width: min(100% - 24px, 1180px); }
       .topbar { top: 10px; width: calc(100% - 20px); padding: 10px; }
-      .phone { display:none; }
+      .nav, .header-actions { display:none; }
+      .menu-toggle { display:grid; }
       .brand { letter-spacing: .18em; }
       .hero { padding-top: 110px; }
       h1 { font-size: 50px; }
@@ -184,6 +221,15 @@
       .hero-badge { width: calc(100% - 24px); left: 12px; }
       section { padding: 58px 0; }
       .offer { padding: 24px; border-radius: 30px; }
+      .mobile-contact-bar {
+        position: fixed; z-index: 28; left:50%; bottom: max(16px, env(safe-area-inset-bottom));
+        transform: translateX(-50%); display:flex; align-items:center; gap:8px;
+        padding: 9px; border-radius:999px; border:1px solid var(--line);
+        background: rgba(8,9,10,.88); backdrop-filter: blur(18px);
+        box-shadow: 0 20px 60px rgba(0,0,0,.38);
+      }
+      .mobile-contact-bar .contact-icon { width:44px; height:44px; }
+      .mobile-contact-bar .phone-icon { background:#f6efe0; color:#0a0a0a; border-color:transparent; }
     }
   </style>
 </head>
@@ -199,8 +245,34 @@
       <a href="#process">Процесс</a>
       <a href="#contact">Расчёт</a>
     </nav>
-    <a class="phone" href="tel:+79181792703">+7 918 179-27-03</a>
+    <div class="header-actions">
+      <a class="contact-icon" href="https://t.me/damalastroy" aria-label="Telegram">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 4 3.7 10.7c-.9.35-.9 1.61.02 1.94l4.35 1.58 1.58 4.35c.33.92 1.59.93 1.94.02L18.3 1.3c.34-.88-.53-1.75-1.41-1.41Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m8.1 14.2 8.1-8.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </a>
+      <a class="contact-icon" href="https://wa.me/79181792703" aria-label="WhatsApp">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 11.5a8 8 0 0 1-11.73 7.08L4 20l1.46-4.09A8 8 0 1 1 20 11.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 8.5c.2-.45.43-.46.78-.46.22 0 .47 0 .67.02.2.02.47-.08.73.54.27.62.92 2.15 1 2.3.08.16.13.34.02.54-.11.2-.16.32-.33.5-.17.18-.36.4-.51.54-.17.16-.35.34-.15.68.2.34.89 1.47 1.9 2.38 1.3 1.16 2.39 1.52 2.73 1.69.34.17.54.14.74-.08.2-.22.85-.99 1.08-1.33.23-.34.45-.28.76-.17.31.11 1.95.92 2.28 1.09.34.17.56.25.64.39.08.14.08.82-.19 1.61-.27.79-1.57 1.5-2.16 1.57-.56.07-1.27.1-2.05-.13-.47-.14-1.07-.35-1.84-.68-.77-.33-2.65-1.01-4.56-2.74-1.49-1.35-2.5-3.01-2.79-3.52-.29-.51-.03-.79.22-1.05.23-.23.51-.6.76-.9.25-.3.34-.51.51-.85.17-.34.08-.64-.04-.9-.11-.25-.97-2.34-1.33-3.2Z" fill="currentColor"/></svg>
+      </a>
+      <a class="phone" href="tel:+79181792703">+7 918 179-27-03</a>
+    </div>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu"><span></span></button>
   </header>
+  <nav class="mobile-menu" id="mobile-menu">
+    <a href="#tariffs">Пакеты</a>
+    <a href="#portfolio">Работы</a>
+    <a href="#process">Процесс</a>
+    <a href="#contact">Расчёт</a>
+  </nav>
+  <div class="mobile-contact-bar">
+    <a class="contact-icon" href="https://t.me/damalastroy" aria-label="Telegram">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 4 3.7 10.7c-.9.35-.9 1.61.02 1.94l4.35 1.58 1.58 4.35c.33.92 1.59.93 1.94.02L18.3 1.3c.34-.88-.53-1.75-1.41-1.41Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m8.1 14.2 8.1-8.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </a>
+    <a class="contact-icon" href="https://wa.me/79181792703" aria-label="WhatsApp">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 11.5a8 8 0 0 1-11.73 7.08L4 20l1.46-4.09A8 8 0 1 1 20 11.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 8.5c.2-.45.43-.46.78-.46.22 0 .47 0 .67.02.2.02.47-.08.73.54.27.62.92 2.15 1 2.3.08.16.13.34.02.54-.11.2-.16.32-.33.5-.17.18-.36.4-.51.54-.17.16-.35.34-.15.68.2.34.89 1.47 1.9 2.38 1.3 1.16 2.39 1.52 2.73 1.69.34.17.54.14.74-.08.2-.22.85-.99 1.08-1.33.23-.34.45-.28.76-.17.31.11 1.95.92 2.28 1.09.34.17.56.25.64.39.08.14.08.82-.19 1.61-.27.79-1.57 1.5-2.16 1.57-.56.07-1.27.1-2.05-.13-.47-.14-1.07-.35-1.84-.68-.77-.33-2.65-1.01-4.56-2.74-1.49-1.35-2.5-3.01-2.79-3.52-.29-.51-.03-.79.22-1.05.23-.23.51-.6.76-.9.25-.3.34-.51.51-.85.17-.34.08-.64-.04-.9-.11-.25-.97-2.34-1.33-3.2Z" fill="currentColor"/></svg>
+    </a>
+    <a class="contact-icon phone-icon" href="tel:+79181792703" aria-label="Позвонить">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.8 3.5c.43-.43 1.11-.48 1.6-.12l2.1 1.58c.52.39.68 1.1.38 1.68l-.9 1.72c-.19.36-.16.79.07 1.12.76 1.12 1.69 2.16 2.8 3.13 1.11.97 2.28 1.79 3.5 2.46.35.19.78.2 1.14.02l1.76-.88c.58-.29 1.29-.12 1.67.4l1.55 2.13c.36.5.31 1.18-.13 1.61l-1.22 1.2c-.95.93-2.36 1.2-3.58.68-2.65-1.13-5.13-2.85-7.41-5.14-2.29-2.28-4.02-4.77-5.15-7.43-.52-1.22-.25-2.64.69-3.58L6.8 3.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
 
   <main>
     <section class="hero">
@@ -344,5 +416,26 @@
       <div class="social"><a href="#">Telegram</a><a href="#">WhatsApp</a><a href="#">Max</a></div>
     </div>
   </footer>
+  <script>
+    const header = document.querySelector('.topbar');
+    const toggle = document.querySelector('.menu-toggle');
+    const mobileMenu = document.querySelector('.mobile-menu');
+
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('is-scrolled', window.scrollY > 24);
+    });
+
+    toggle.addEventListener('click', () => {
+      const open = mobileMenu.classList.toggle('is-open');
+      toggle.setAttribute('aria-expanded', String(open));
+    });
+
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('is-open');
+        toggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  </script>
 </body>
 </html>
