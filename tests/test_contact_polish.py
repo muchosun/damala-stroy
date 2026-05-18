@@ -79,6 +79,13 @@ class ContactPolishTests(unittest.TestCase):
         self.assertIn("quoteForm.addEventListener('submit'", html)
         self.assertIn("window.open(buildWhatsAppLeadUrl(quoteForm), '_blank', 'noopener')", html)
 
+    def test_mobile_footer_social_links_wrap_without_overflow(self):
+        html = self.page()
+        self.assertIn('@media (max-width: 560px)', html)
+        self.assertIn('.footer-grid { flex-direction: column; align-items: flex-start; }', html)
+        self.assertIn('.social { flex-wrap: wrap; width: 100%; }', html)
+        self.assertIn('.social a { text-align: center; }', html)
+
 
 if __name__ == '__main__':
     unittest.main()
