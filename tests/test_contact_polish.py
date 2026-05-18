@@ -86,6 +86,10 @@ class ContactPolishTests(unittest.TestCase):
         self.assertIn('.social { flex-wrap: wrap; width: 100%; }', html)
         self.assertIn('.social a { text-align: center; }', html)
 
+    def test_yandex_webmaster_verification_meta_exists(self):
+        html = self.page()
+        self.assertIn('<meta name="yandex-verification" content="353904968985aa3f" />', html)
+
 
 if __name__ == '__main__':
     unittest.main()
