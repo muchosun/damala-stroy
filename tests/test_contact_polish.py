@@ -90,6 +90,17 @@ class ContactPolishTests(unittest.TestCase):
         html = self.page()
         self.assertIn('<meta name="yandex-verification" content="353904968985aa3f" />', html)
 
+    def test_yandex_metrika_counter_exists(self):
+        html = self.page()
+        self.assertIn('Yandex.Metrika counter', html)
+        self.assertIn('https://mc.yandex.ru/metrika/tag.js?id=109292117', html)
+        self.assertIn("ym(109292117, 'init'", html)
+        self.assertIn('webvisor:true', html)
+        self.assertIn('clickmap:true', html)
+        self.assertIn('accurateTrackBounce:true', html)
+        self.assertIn('trackLinks:true', html)
+        self.assertIn('https://mc.yandex.ru/watch/109292117', html)
+
 
 if __name__ == '__main__':
     unittest.main()
