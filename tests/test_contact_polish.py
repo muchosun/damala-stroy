@@ -54,6 +54,31 @@ class ContactPolishTests(unittest.TestCase):
         self.assertIn('от 22 000 ₽/м²', html)
         self.assertNotIn('от 11 000 ₽/м²', html)
 
+    def test_footer_social_links_are_configured(self):
+        html = self.page()
+        self.assertIn('const contactConfig = {', html)
+        self.assertIn("telegramUrl: 'https://t.me/damalastroy'", html)
+        self.assertIn("whatsappUrl: 'https://wa.me/79181792703'", html)
+        self.assertIn("maxUrl: 'https://max.ru/damalastroy'", html)
+        self.assertIn('data-contact-link="telegram"', html)
+        self.assertIn('data-contact-link="whatsapp"', html)
+        self.assertIn('data-contact-link="max"', html)
+        self.assertNotIn('<div class="social"><a href="#">Telegram</a><a href="#">WhatsApp</a><a href="#">Max</a></div>', html)
+
+    def test_quote_form_opens_prefilled_whatsapp_message(self):
+        html = self.page()
+        self.assertIn('id="quote-form"', html)
+        self.assertIn('name="clientName"', html)
+        self.assertIn('name="clientPhone"', html)
+        self.assertIn('name="tariff"', html)
+        self.assertIn('name="details"', html)
+        self.assertIn('type="submit"', html)
+        self.assertIn('function buildWhatsAppLeadUrl(form)', html)
+        self.assertIn('new FormData(form)', html)
+        self.assertIn('encodeURIComponent(message)', html)
+        self.assertIn("quoteForm.addEventListener('submit'", html)
+        self.assertIn("window.open(buildWhatsAppLeadUrl(quoteForm), '_blank', 'noopener')", html)
+
 
 if __name__ == '__main__':
     unittest.main()
