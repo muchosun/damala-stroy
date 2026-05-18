@@ -47,6 +47,13 @@ class ContactPolishTests(unittest.TestCase):
         self.assertIn('.contact-icon .bi-whatsapp,', html)
         self.assertIn('.contact-icon .bi-telephone-fill { transform: translateY(0); }', html)
 
+    def test_tariff_prices_match_client_update(self):
+        html = self.page()
+        self.assertIn('от 14 000 ₽/м²', html)
+        self.assertIn('от 18 000 ₽/м²', html)
+        self.assertIn('от 22 000 ₽/м²', html)
+        self.assertNotIn('от 11 000 ₽/м²', html)
+
 
 if __name__ == '__main__':
     unittest.main()
