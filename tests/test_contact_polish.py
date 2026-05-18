@@ -28,7 +28,8 @@ class ContactPolishTests(unittest.TestCase):
 
     def test_contact_icons_use_consistent_icon_pack(self):
         html = self.page()
-        self.assertIn('class="bi bi-telegram"', html)
+        self.assertIn('class="bi bi-send-fill"', html)
+        self.assertNotIn('class="bi bi-telegram"', html)
         self.assertIn('class="bi bi-whatsapp"', html)
         self.assertIn('class="bi bi-telephone-fill"', html)
 
@@ -41,7 +42,7 @@ class ContactPolishTests(unittest.TestCase):
         html = self.page()
         self.assertIn('line-height:0;', html)
         self.assertIn('.contact-icon svg { display:block;', html)
-        self.assertIn('.contact-icon .bi-telegram { transform: translate(-.5px, .5px); }', html)
+        self.assertIn('.contact-icon .bi-send-fill,', html)
         self.assertIn('.contact-icon .bi-whatsapp,', html)
         self.assertIn('.contact-icon .bi-telephone-fill { transform: translateY(0); }', html)
 
