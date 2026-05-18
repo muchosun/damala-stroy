@@ -41,7 +41,7 @@ class ContactPolishTests(unittest.TestCase):
         html = self.page()
         self.assertIn('line-height:0;', html)
         self.assertIn('.contact-icon svg { display:block;', html)
-        self.assertIn('.contact-icon .bi-telegram,', html)
+        self.assertIn('.contact-icon .bi-telegram { transform: translate(-.5px, .5px); }', html)
         self.assertIn('.contact-icon .bi-whatsapp,', html)
         self.assertIn('.contact-icon .bi-telephone-fill { transform: translateY(0); }', html)
 
