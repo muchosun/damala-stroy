@@ -70,13 +70,17 @@
     .contact-icon {
       width: 42px; height: 42px; border-radius: 999px;
       display:grid; place-items:center;
+      line-height:0;
       border:1px solid var(--white-line);
       background: rgba(255,255,255,.04);
       color: var(--gold-2);
       transition: transform .2s ease, border-color .2s ease, background .2s ease;
     }
     .contact-icon:hover { transform: translateY(-1px); border-color: var(--line); background: rgba(215,168,95,.12); }
-    .contact-icon svg { width: 19px; height: 19px; }
+    .contact-icon svg { display:block; width: 19px; height: 19px; }
+    .contact-icon .bi-telegram,
+    .contact-icon .bi-whatsapp,
+    .contact-icon .bi-telephone-fill { transform: translateY(0); }
     .phone { padding: 11px 16px; border-radius: 999px; background: #f6efe0; color: #0a0a0a; font-weight: 800; }
     .menu-toggle {
       display:none; width:42px; height:42px; border-radius:999px;

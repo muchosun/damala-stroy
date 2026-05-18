@@ -37,6 +37,14 @@ class ContactPolishTests(unittest.TestCase):
         self.assertIn('.mobile-contact-bar .contact-icon { width:52px; height:52px; }', html)
         self.assertIn('.mobile-contact-bar .contact-icon svg { width:23px; height:23px; }', html)
 
+    def test_contact_icons_are_optically_centered(self):
+        html = self.page()
+        self.assertIn('line-height:0;', html)
+        self.assertIn('.contact-icon svg { display:block;', html)
+        self.assertIn('.contact-icon .bi-telegram,', html)
+        self.assertIn('.contact-icon .bi-whatsapp,', html)
+        self.assertIn('.contact-icon .bi-telephone-fill { transform: translateY(0); }', html)
+
 
 if __name__ == '__main__':
     unittest.main()
