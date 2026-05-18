@@ -26,6 +26,17 @@ class ContactPolishTests(unittest.TestCase):
         self.assertIn("mobileMenu.classList.toggle('is-open')", html)
         self.assertIn("toggle.setAttribute('aria-expanded', String(open))", html)
 
+    def test_contact_icons_use_consistent_icon_pack(self):
+        html = self.page()
+        self.assertIn('class="bi bi-telegram"', html)
+        self.assertIn('class="bi bi-whatsapp"', html)
+        self.assertIn('class="bi bi-telephone-fill"', html)
+
+    def test_mobile_contact_icons_are_larger(self):
+        html = self.page()
+        self.assertIn('.mobile-contact-bar .contact-icon { width:52px; height:52px; }', html)
+        self.assertIn('.mobile-contact-bar .contact-icon svg { width:23px; height:23px; }', html)
+
 
 if __name__ == '__main__':
     unittest.main()
