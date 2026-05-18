@@ -111,6 +111,13 @@ class ContactPolishTests(unittest.TestCase):
         self.assertIn('<meta property="og:title" content="Ремонт квартир под ключ в Краснодаре — DAMALA STROY" />', html)
         self.assertIn('<meta property="og:description" content="Ремонт квартир и домов под ключ в Краснодаре: фиксированная смета, договор, гарантия, замер и клининг. Цены от 14 000 ₽/м²." />', html)
 
+    def test_favicon_is_configured(self):
+        html = self.page()
+        root = HTML.parent
+        self.assertIn('<link rel="icon" type="image/svg+xml" href="/favicon.svg" />', html)
+        self.assertTrue((root / 'favicon.svg').exists())
+        self.assertIn('<svg', (root / 'favicon.svg').read_text(encoding='utf-8'))
+
 
 if __name__ == '__main__':
     unittest.main()
