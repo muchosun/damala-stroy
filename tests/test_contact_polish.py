@@ -101,6 +101,16 @@ class ContactPolishTests(unittest.TestCase):
         self.assertIn('trackLinks:true', html)
         self.assertIn('https://mc.yandex.ru/watch/109292117', html)
 
+    def test_seo_meta_tags_target_krasnodar_repair_core(self):
+        html = self.page()
+        self.assertIn('<title>Ремонт квартир под ключ в Краснодаре — цена от 14 000 ₽/м² | DAMALA STROY</title>', html)
+        self.assertIn('<meta name="description" content="Ремонт квартир и домов под ключ в Краснодаре от DAMALA STROY: фиксированная смета, договор, гарантия, замер и клининг. Цены от 14 000 ₽/м²." />', html)
+        self.assertIn('<meta name="keywords" content="ремонт квартир под ключ Краснодар, ремонт под ключ Краснодар, ремонт квартир Краснодар цена за м2, ремонт квартиры в новостройке Краснодар, дизайнерский ремонт квартиры Краснодар, косметический ремонт Краснодар, капитальный ремонт квартиры Краснодар" />', html)
+        self.assertIn('<meta name="geo.placename" content="Краснодар" />', html)
+        self.assertIn('<link rel="canonical" href="https://damalastroy.ru/" />', html)
+        self.assertIn('<meta property="og:title" content="Ремонт квартир под ключ в Краснодаре — DAMALA STROY" />', html)
+        self.assertIn('<meta property="og:description" content="Ремонт квартир и домов под ключ в Краснодаре: фиксированная смета, договор, гарантия, замер и клининг. Цены от 14 000 ₽/м²." />', html)
+
 
 if __name__ == '__main__':
     unittest.main()
