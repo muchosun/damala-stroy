@@ -118,6 +118,19 @@ class ContactPolishTests(unittest.TestCase):
         self.assertTrue((root / 'favicon.svg').exists())
         self.assertIn('<svg', (root / 'favicon.svg').read_text(encoding='utf-8'))
 
+    def test_visible_copy_uses_client_oriented_seo_language(self):
+        html = self.page()
+        self.assertIn('ремонт квартир под ключ в Краснодаре', html)
+        self.assertIn('понятной ценой за м²', html)
+        self.assertIn('дом под ключ в Краснодаре', html)
+        self.assertIn('замер, смета, договор, контроль работ', html)
+        self.assertIn('расчёт стоимости, сроки и варианты отделки', html)
+        self.assertNotIn('без хаоса для клиента', html)
+        self.assertNotIn('Линейка сделана так', html)
+        self.assertNotIn('Вместо перегруженной листовки', html)
+        self.assertNotIn('Клиенту важно не только красиво', html)
+        self.assertNotIn('Оставьте контакты, площадь и уровень ремонта', html)
+
 
 if __name__ == '__main__':
     unittest.main()
