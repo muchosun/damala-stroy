@@ -16,18 +16,6 @@
   <meta property="og:description" content="Ремонт квартир и домов под ключ в Краснодаре: фиксированная смета, договор, гарантия, замер и клининг. Цены от 14 000 ₽/м²." />
   <link rel="canonical" href="https://damalastroy.ru/" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <!-- Yandex.Metrika counter -->
-  <script type="text/javascript">
-    (function(m,e,t,r,i,k,a){
-      m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-      m[i].l=1*new Date();
-      for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-      k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=109292117', 'ym');
-
-    ym(109292117, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
-  </script>
-  <!-- /Yandex.Metrika counter -->
   <style>
     :root {
       --bg: #070809;
@@ -213,6 +201,12 @@
     .offer h2 { font-size: clamp(34px, 5vw, 58px); margin: 0 0 18px; line-height:.96; letter-spacing:-.04em; text-transform:uppercase; }
     .offer p { color: var(--muted); line-height: 1.6; }
     .form { display:grid; gap:12px; }
+    .consent-row {
+      display:grid; grid-template-columns: 18px 1fr; gap:10px; align-items:start;
+      color: var(--muted); font-size: 12px; line-height:1.45;
+    }
+    .consent-row input { width:18px; min-height:18px; margin-top:2px; accent-color: var(--gold); }
+    .consent-row a { color: var(--gold-2); text-decoration: underline; text-underline-offset: 3px; }
     input, select, textarea {
       width:100%; min-height:58px; border-radius:18px; border:1px solid var(--white-line);
       background: rgba(255,255,255,.07); color: var(--text); padding: 0 18px; outline:none; font-size:15px;
@@ -224,6 +218,25 @@
     .footer-grid { display:flex; justify-content:space-between; gap: 20px; align-items:center; }
     .social { display:flex; gap:10px; }
     .social a { padding:11px 14px; border:1px solid var(--white-line); border-radius:999px; }
+    .footer-legal { display:grid; gap:8px; max-width: 640px; line-height:1.55; }
+    .legal-note { font-size: 13px; color: var(--muted); }
+    .legal-links { display:flex; flex-wrap:wrap; gap:10px 14px; font-size: 13px; }
+    .legal-links a { color: var(--gold-2); text-decoration: underline; text-underline-offset: 3px; }
+    .cookie-banner {
+      position: fixed; z-index: 60; left: 50%; bottom: 18px; transform: translateX(-50%);
+      width: min(720px, calc(100% - 24px)); display:flex; gap:16px; align-items:center; justify-content:space-between;
+      padding: 16px; border-radius: 22px; border:1px solid var(--line);
+      background: rgba(8,9,10,.94); backdrop-filter: blur(18px); color: var(--muted);
+      box-shadow: 0 20px 70px rgba(0,0,0,.45); font-size: 13px; line-height:1.45;
+    }
+    .cookie-banner[hidden] { display:none; }
+    .cookie-banner a { color: var(--gold-2); text-decoration: underline; text-underline-offset: 3px; }
+    .cookie-actions { display:flex; gap:8px; flex-shrink:0; }
+    .cookie-actions button {
+      min-height: 40px; padding:0 14px; border-radius:999px; border:1px solid var(--white-line);
+      background: rgba(255,255,255,.04); color: var(--text); cursor:pointer; font-weight:700;
+    }
+    .cookie-actions [data-cookie-accept] { border-color: transparent; background: linear-gradient(135deg, var(--gold), var(--gold-2)); color:#101010; }
 
     @media (max-width: 920px) {
       .nav { display:none; }
@@ -262,11 +275,13 @@
       .footer-grid { flex-direction: column; align-items: flex-start; }
       .social { flex-wrap: wrap; width: 100%; }
       .social a { text-align: center; }
+      .cookie-banner { align-items:stretch; flex-direction:column; bottom: max(12px, env(safe-area-inset-bottom)); }
+      .cookie-actions { width:100%; }
+      .cookie-actions button { flex:1; }
     }
   </style>
 </head>
 <body>
-  <noscript><div><img src="https://mc.yandex.ru/watch/109292117" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
   <header class="topbar">
     <a href="#" class="brand" aria-label="DAMALA STROY">
       <div class="brand-mark">D</div>
@@ -436,6 +451,10 @@
               <option>Дизайн / премиум</option>
             </select>
             <textarea name="details" placeholder="Площадь, город, что нужно сделать"></textarea>
+            <label class="consent-row">
+              <input type="checkbox" name="personalDataConsent" required />
+              <span>Я соглашаюсь на обработку персональных данных и ознакомлен(а) с <a href="/privacy.html" target="_blank" rel="noopener">политикой обработки персональных данных</a> и <a href="/consent.html" target="_blank" rel="noopener">согласием</a>.</span>
+            </label>
             <button class="btn btn-primary" type="submit">Получить расчёт</button>
           </form>
         </div>
@@ -445,7 +464,15 @@
 
   <footer>
     <div class="page footer-grid">
-      <div>DAMALA STROY · ремонт под ключ · @damalastroy</div>
+      <div class="footer-legal">
+        <div>DAMALA STROY · ремонт под ключ · @damalastroy</div>
+        <div class="legal-note">ООО «Ркуб» · ИНН 0500048522 · ОГРН 1260500001970 · КПП 050001001. Не является публичной офертой.</div>
+        <div class="legal-links">
+          <a href="/privacy.html">Политика персональных данных</a>
+          <a href="/consent.html">Согласие на обработку данных</a>
+          <a href="/cookies.html">Cookie</a>
+        </div>
+      </div>
       <div class="social">
         <a href="https://t.me/damalastroy" data-contact-link="telegram">Telegram</a>
         <a href="https://wa.me/79181792703" data-contact-link="whatsapp">WhatsApp</a>
@@ -453,6 +480,13 @@
       </div>
     </div>
   </footer>
+  <div class="cookie-banner" id="cookie-banner" role="dialog" aria-live="polite" aria-label="Настройки cookie">
+    <div>Мы используем cookie и Яндекс.Метрику для анализа посещаемости сайта. Подробнее — в <a href="/cookies.html">политике cookie</a>.</div>
+    <div class="cookie-actions">
+      <button type="button" data-cookie-decline>Отклонить</button>
+      <button type="button" data-cookie-accept>Принять</button>
+    </div>
+  </div>
   <script>
     const contactConfig = {
       phoneDisplay: '+7 918 179-27-03',
@@ -467,6 +501,10 @@
     const toggle = document.querySelector('.menu-toggle');
     const mobileMenu = document.querySelector('.mobile-menu');
     const quoteForm = document.querySelector('#quote-form');
+    const cookieBanner = document.querySelector('#cookie-banner');
+    const acceptCookies = document.querySelector('[data-cookie-accept]');
+    const declineCookies = document.querySelector('[data-cookie-decline]');
+    let metrikaLoaded = false;
 
     const contactLinks = {
       telegram: contactConfig.telegramUrl,
@@ -488,6 +526,58 @@
     function formValue(formData, name) {
       return String(formData.get(name) || '').trim();
     }
+
+    // Yandex.Metrika counter
+    function loadYandexMetrika() {
+      if (metrikaLoaded) return;
+      metrikaLoaded = true;
+      (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a);
+      })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=109292117', 'ym');
+
+      ym(109292117, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+    }
+
+    function readCookieConsent() {
+      try {
+        return localStorage.getItem('damalaCookieConsent');
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function saveCookieConsent(value) {
+      try {
+        localStorage.setItem('damalaCookieConsent', value);
+      } catch (error) {
+        // Если хранилище браузера недоступно, не блокируем работу сайта.
+      }
+    }
+
+    function setupCookieConsent() {
+      const savedCookieConsent = readCookieConsent();
+      if (savedCookieConsent === 'accepted') {
+        cookieBanner.hidden = true;
+        loadYandexMetrika();
+      } else if (savedCookieConsent === 'declined') {
+        cookieBanner.hidden = true;
+      }
+
+      acceptCookies.addEventListener('click', () => {
+        saveCookieConsent('accepted');
+        cookieBanner.hidden = true;
+        loadYandexMetrika();
+      });
+
+      declineCookies.addEventListener('click', () => {
+        saveCookieConsent('declined');
+        cookieBanner.hidden = true;
+      });
+    }
+    // /Yandex.Metrika counter
 
     function buildWhatsAppLeadUrl(form) {
       const formData = new FormData(form);
@@ -525,8 +615,14 @@
 
     quoteForm.addEventListener('submit', event => {
       event.preventDefault();
+      if (!quoteForm.personalDataConsent.checked) {
+        quoteForm.personalDataConsent.reportValidity();
+        return;
+      }
       window.open(buildWhatsAppLeadUrl(quoteForm), '_blank', 'noopener');
     });
+
+    setupCookieConsent();
   </script>
 </body>
 </html>

@@ -99,7 +99,7 @@ class ContactPolishTests(unittest.TestCase):
         self.assertIn('clickmap:true', html)
         self.assertIn('accurateTrackBounce:true', html)
         self.assertIn('trackLinks:true', html)
-        self.assertIn('https://mc.yandex.ru/watch/109292117', html)
+        self.assertNotIn('<noscript><div><img src="https://mc.yandex.ru/watch/109292117"', html)
 
     def test_seo_meta_tags_target_krasnodar_repair_core(self):
         html = self.page()
@@ -141,6 +141,36 @@ class ContactPolishTests(unittest.TestCase):
         self.assertIn('<lastmod>2026-05-19</lastmod>', sitemap.read_text(encoding='utf-8'))
         self.assertIn('Sitemap: https://damalastroy.ru/sitemap.xml', robots.read_text(encoding='utf-8'))
         self.assertIn('Allow: /', robots.read_text(encoding='utf-8'))
+
+    def test_legal_documents_and_links_exist(self):
+        root = HTML.parent
+        html = self.page()
+        for filename in ['privacy.html', 'consent.html', 'cookies.html']:
+            self.assertTrue((root / filename).exists(), filename)
+        self.assertIn('ООО «Ркуб»', html)
+        self.assertIn('ИНН 0500048522', html)
+        self.assertIn('ОГРН 1260500001970', html)
+        self.assertIn('href="/privacy.html"', html)
+        self.assertIn('href="/consent.html"', html)
+        self.assertIn('href="/cookies.html"', html)
+        self.assertIn('Не является публичной офертой', html)
+
+    def test_form_requires_personal_data_consent(self):
+        html = self.page()
+        self.assertIn('name="personalDataConsent"', html)
+        self.assertIn('required', html)
+        self.assertIn('Я соглашаюсь на обработку персональных данных', html)
+        self.assertIn('if (!quoteForm.personalDataConsent.checked)', html)
+
+    def test_yandex_metrika_is_loaded_after_cookie_consent(self):
+        html = self.page()
+        self.assertIn('id="cookie-banner"', html)
+        self.assertIn('loadYandexMetrika()', html)
+        self.assertIn("localStorage.getItem('damalaCookieConsent')", html)
+        self.assertIn("localStorage.setItem('damalaCookieConsent', value)", html)
+        self.assertIn("saveCookieConsent('accepted')", html)
+        self.assertIn("saveCookieConsent('declined')", html)
+        self.assertNotIn('<noscript><div><img src="https://mc.yandex.ru/watch/109292117"', html)
 
 
 if __name__ == '__main__':
