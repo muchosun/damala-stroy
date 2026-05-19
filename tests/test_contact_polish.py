@@ -131,6 +131,17 @@ class ContactPolishTests(unittest.TestCase):
         self.assertNotIn('Клиенту важно не только красиво', html)
         self.assertNotIn('Оставьте контакты, площадь и уровень ремонта', html)
 
+    def test_sitemap_and_robots_are_configured(self):
+        root = HTML.parent
+        sitemap = root / 'sitemap.xml'
+        robots = root / 'robots.txt'
+        self.assertTrue(sitemap.exists())
+        self.assertTrue(robots.exists())
+        self.assertIn('<loc>https://damalastroy.ru/</loc>', sitemap.read_text(encoding='utf-8'))
+        self.assertIn('<lastmod>2026-05-19</lastmod>', sitemap.read_text(encoding='utf-8'))
+        self.assertIn('Sitemap: https://damalastroy.ru/sitemap.xml', robots.read_text(encoding='utf-8'))
+        self.assertIn('Allow: /', robots.read_text(encoding='utf-8'))
+
 
 if __name__ == '__main__':
     unittest.main()
