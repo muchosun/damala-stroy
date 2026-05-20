@@ -130,10 +130,11 @@ class ContactPolishTests(unittest.TestCase):
         html = self.page()
         root = HTML.parent
         self.assertIn('<meta name="apple-mobile-web-app-title" content="DAMALA STROY" />', html)
+        self.assertIn('<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />', html)
         self.assertIn('<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />', html)
         self.assertIn('<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />', html)
         self.assertIn('<link rel="manifest" href="/site.webmanifest" />', html)
-        for filename in ['favicon-16x16.png', 'favicon-32x32.png', 'android-chrome-192x192.png', 'android-chrome-512x512.png', 'site.webmanifest']:
+        for filename in ['favicon-16x16.png', 'favicon-32x32.png', 'favicon-96x96.png', 'android-chrome-192x192.png', 'android-chrome-512x512.png', 'site.webmanifest']:
             self.assertTrue((root / filename).exists(), filename)
         manifest = (root / 'site.webmanifest').read_text(encoding='utf-8')
         self.assertIn('"name": "DAMALA STROY"', manifest)
