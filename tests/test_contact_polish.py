@@ -126,6 +126,21 @@ class ContactPolishTests(unittest.TestCase):
         self.assertTrue((root / 'favicon.ico').exists())
         self.assertTrue((root / 'apple-touch-icon.png').exists())
 
+    def test_favicon_checker_requirements_are_configured(self):
+        html = self.page()
+        root = HTML.parent
+        self.assertIn('<meta name="apple-mobile-web-app-title" content="DAMALA STROY" />', html)
+        self.assertIn('<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />', html)
+        self.assertIn('<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />', html)
+        self.assertIn('<link rel="manifest" href="/site.webmanifest" />', html)
+        for filename in ['favicon-16x16.png', 'favicon-32x32.png', 'android-chrome-192x192.png', 'android-chrome-512x512.png', 'site.webmanifest']:
+            self.assertTrue((root / filename).exists(), filename)
+        manifest = (root / 'site.webmanifest').read_text(encoding='utf-8')
+        self.assertIn('"name": "DAMALA STROY"', manifest)
+        self.assertIn('"short_name": "DAMALA"', manifest)
+        self.assertIn('"src": "/android-chrome-192x192.png"', manifest)
+        self.assertIn('"src": "/android-chrome-512x512.png"', manifest)
+
     def test_visible_copy_uses_client_oriented_seo_language(self):
         html = self.page()
         self.assertIn('ремонт квартир под ключ в Краснодаре', html)
