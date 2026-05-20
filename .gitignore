@@ -1,3 +1,6 @@
 .superpowers/
 .playwright-cli/
 tests/__pycache__/
+
+# Local working materials: notes, drafts, commercial docs. Not synced to GitHub.
+_work/
