@@ -114,26 +114,29 @@ class ContactPolishTests(unittest.TestCase):
     def test_favicon_is_configured(self):
         html = self.page()
         root = HTML.parent
-        self.assertIn('<link rel="icon" type="image/svg+xml" href="/favicon.svg" />', html)
+        self.assertIn('<link rel="icon" type="image/svg+xml" href="/favicon.svg?v=20260520" />', html)
         self.assertTrue((root / 'favicon.svg').exists())
         self.assertIn('<svg', (root / 'favicon.svg').read_text(encoding='utf-8'))
 
     def test_favicon_has_browser_fallbacks(self):
         html = self.page()
         root = HTML.parent
-        self.assertIn('<link rel="icon" href="/favicon.ico" sizes="any" />', html)
-        self.assertIn('<link rel="apple-touch-icon" href="/apple-touch-icon.png" />', html)
+        self.assertIn('<link rel="shortcut icon" href="/favicon.ico?v=20260520" type="image/x-icon" />', html)
+        self.assertIn('<link rel="icon" href="/favicon.ico?v=20260520" sizes="any" />', html)
+        self.assertIn('<link rel="mask-icon" href="/safari-pinned-tab.svg?v=20260520" color="#d7a85f" />', html)
+        self.assertIn('<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20260520" />', html)
         self.assertTrue((root / 'favicon.ico').exists())
         self.assertTrue((root / 'apple-touch-icon.png').exists())
+        self.assertTrue((root / 'safari-pinned-tab.svg').exists())
 
     def test_favicon_checker_requirements_are_configured(self):
         html = self.page()
         root = HTML.parent
         self.assertIn('<meta name="apple-mobile-web-app-title" content="DAMALA STROY" />', html)
-        self.assertIn('<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />', html)
-        self.assertIn('<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />', html)
-        self.assertIn('<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />', html)
-        self.assertIn('<link rel="manifest" href="/site.webmanifest" />', html)
+        self.assertIn('<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png?v=20260520" />', html)
+        self.assertIn('<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=20260520" />', html)
+        self.assertIn('<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=20260520" />', html)
+        self.assertIn('<link rel="manifest" href="/site.webmanifest?v=20260520" />', html)
         for filename in ['favicon-16x16.png', 'favicon-32x32.png', 'favicon-96x96.png', 'android-chrome-192x192.png', 'android-chrome-512x512.png', 'site.webmanifest']:
             self.assertTrue((root / filename).exists(), filename)
         manifest = (root / 'site.webmanifest').read_text(encoding='utf-8')
