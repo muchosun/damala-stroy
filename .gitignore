@@ -4,3 +4,7 @@ tests/__pycache__/
 
 # Local working materials: notes, drafts, commercial docs. Not synced to GitHub.
 _work/
+
+# Local agent instructions for this workspace.
+AGENTS.md
+agent.md
