@@ -118,6 +118,14 @@ class ContactPolishTests(unittest.TestCase):
         self.assertTrue((root / 'favicon.svg').exists())
         self.assertIn('<svg', (root / 'favicon.svg').read_text(encoding='utf-8'))
 
+    def test_favicon_has_browser_fallbacks(self):
+        html = self.page()
+        root = HTML.parent
+        self.assertIn('<link rel="icon" href="/favicon.ico" sizes="any" />', html)
+        self.assertIn('<link rel="apple-touch-icon" href="/apple-touch-icon.png" />', html)
+        self.assertTrue((root / 'favicon.ico').exists())
+        self.assertTrue((root / 'apple-touch-icon.png').exists())
+
     def test_visible_copy_uses_client_oriented_seo_language(self):
         html = self.page()
         self.assertIn('ремонт квартир под ключ в Краснодаре', html)
