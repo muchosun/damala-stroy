@@ -138,6 +138,37 @@ class ContactPolishTests(unittest.TestCase):
         self.assertIn('Ремонт квартир в новостройке в Краснодаре', offer_names)
         self.assertIn('Капитальный ремонт квартир в Краснодаре', offer_names)
 
+
+    def test_seo_faq_is_separate_page_without_main_landing_block(self):
+        root = HTML.parent
+        html = self.page()
+        faq_path = root / 'faq.html'
+        self.assertTrue(faq_path.exists())
+        self.assertNotIn('<section id="faq">', html)
+        self.assertIn('href="/faq.html"', html)
+
+    def test_faq_page_targets_commercial_questions(self):
+        faq = (HTML.parent / 'faq.html').read_text(encoding='utf-8')
+        self.assertIn('<h1>Вопросы по ремонту квартир в Краснодаре</h1>', faq)
+        self.assertIn('Сколько стоит ремонт квартиры под ключ в Краснодаре?', faq)
+        self.assertIn('Цена начинается от 14 000 ₽/м²', faq)
+        self.assertIn('Делаете ремонт квартир в новостройках?', faq)
+        self.assertIn('Можно ли получить смету до начала работ?', faq)
+        self.assertIn('Работаете по договору и с гарантией?', faq)
+        self.assertIn('Сколько длится ремонт квартиры?', faq)
+
+    def test_faq_page_structured_data_exists(self):
+        faq_html = (HTML.parent / 'faq.html').read_text(encoding='utf-8')
+        scripts = re.findall(r'<script type="application/ld\+json">\s*(.*?)\s*</script>', faq_html, re.S)
+        data = [json.loads(script) for script in scripts]
+        faq = next((item for item in data if item.get('@type') == 'FAQPage'), None)
+        self.assertIsNotNone(faq)
+        self.assertEqual(len(faq['mainEntity']), 5)
+        questions = {item['name'] for item in faq['mainEntity']}
+        self.assertIn('Сколько стоит ремонт квартиры под ключ в Краснодаре?', questions)
+        self.assertIn('Делаете ремонт квартир в новостройках?', questions)
+        self.assertIn('Работаете по договору и с гарантией?', questions)
+
     def test_favicon_is_configured(self):
         html = self.page()
         root = HTML.parent
@@ -191,8 +222,10 @@ class ContactPolishTests(unittest.TestCase):
         robots = root / 'robots.txt'
         self.assertTrue(sitemap.exists())
         self.assertTrue(robots.exists())
-        self.assertIn('<loc>https://damalastroy.ru/</loc>', sitemap.read_text(encoding='utf-8'))
-        self.assertIn('<lastmod>2026-05-19</lastmod>', sitemap.read_text(encoding='utf-8'))
+        sitemap_text = sitemap.read_text(encoding='utf-8')
+        self.assertIn('<loc>https://damalastroy.ru/</loc>', sitemap_text)
+        self.assertIn('<loc>https://damalastroy.ru/faq.html</loc>', sitemap_text)
+        self.assertIn('<lastmod>2026-05-23</lastmod>', sitemap_text)
         self.assertIn('Sitemap: https://damalastroy.ru/sitemap.xml', robots.read_text(encoding='utf-8'))
         self.assertIn('Allow: /', robots.read_text(encoding='utf-8'))
 
