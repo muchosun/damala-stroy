@@ -173,6 +173,58 @@ class ContactPolishTests(unittest.TestCase):
         self.assertEqual(service['offers']['lowPrice'], 18000)
 
 
+
+    def test_newbuild_repair_page_exists_with_commercial_core(self):
+        root = HTML.parent
+        page_path = root / 'remont-kvartir-v-novostroyke.html'
+        self.assertTrue(page_path.exists())
+        page = page_path.read_text(encoding='utf-8')
+        self.assertIn('<title>Ремонт квартир в новостройке в Краснодаре | DAMALA STROY</title>', page)
+        self.assertIn('<h1>Ремонт квартир в новостройке в Краснодаре</h1>', page)
+        self.assertIn('ремонт квартиры в новостройке', page)
+        self.assertIn('ремонт квартир под ключ', page)
+        self.assertIn('черновая отделка', page)
+        self.assertIn('электрика', page)
+        self.assertIn('сантехника', page)
+        self.assertIn('смета до старта', page)
+        self.assertIn('без предоплаты', page)
+        self.assertIn('гарантия по договору', page)
+        self.assertIn('href="/tseny-na-remont-kvartir.html"', page)
+
+    def test_cosmetic_repair_page_exists_with_commercial_core(self):
+        root = HTML.parent
+        page_path = root / 'kosmeticheskiy-remont-kvartir.html'
+        self.assertTrue(page_path.exists())
+        page = page_path.read_text(encoding='utf-8')
+        self.assertIn('<title>Косметический ремонт квартир в Краснодаре | DAMALA STROY</title>', page)
+        self.assertIn('<h1>Косметический ремонт квартир в Краснодаре</h1>', page)
+        self.assertIn('косметический ремонт квартиры', page)
+        self.assertIn('ремонт квартиры под ключ', page)
+        self.assertIn('обновление отделки', page)
+        self.assertIn('покраска стен', page)
+        self.assertIn('обои', page)
+        self.assertIn('напольные покрытия', page)
+        self.assertIn('смета до старта', page)
+        self.assertIn('гарантия по договору', page)
+        self.assertIn('href="/tseny-na-remont-kvartir.html"', page)
+
+    def test_new_seo_pages_structured_data_exists(self):
+        pages = {
+            'remont-kvartir-v-novostroyke.html': ('Ремонт квартир в новостройке в Краснодаре', 14000),
+            'kosmeticheskiy-remont-kvartir.html': ('Косметический ремонт квартир в Краснодаре', 14000),
+        }
+        for filename, (name, low_price) in pages.items():
+            with self.subTest(filename=filename):
+                page_html = (HTML.parent / filename).read_text(encoding='utf-8')
+                scripts = re.findall(r'<script type="application/ld\+json">\s*(.*?)\s*</script>', page_html, re.S)
+                data = [json.loads(script) for script in scripts]
+                service = next((item for item in data if item.get('@type') == 'Service'), None)
+                self.assertIsNotNone(service)
+                self.assertEqual(service['name'], name)
+                self.assertEqual(service['provider']['@id'], 'https://damalastroy.ru/#business')
+                self.assertEqual(service['areaServed']['name'], 'Краснодар')
+                self.assertEqual(service['offers']['lowPrice'], low_price)
+
     def test_design_repair_page_exists_with_high_ticket_core(self):
         root = HTML.parent
         page_path = root / 'dizayn-i-remont-kvartiry.html'
@@ -234,6 +286,8 @@ class ContactPolishTests(unittest.TestCase):
         self.assertIn('гарантия по договору', html)
         self.assertIn('href="/tseny-na-remont-kvartir.html"', html)
         self.assertIn('href="/dizayn-i-remont-kvartiry.html"', html)
+        self.assertIn('href="/remont-kvartir-v-novostroyke.html"', html)
+        self.assertIn('href="/kosmeticheskiy-remont-kvartir.html"', html)
 
     def test_prices_page_exists_with_commercial_seo_core(self):
         root = HTML.parent
@@ -395,6 +449,8 @@ class ContactPolishTests(unittest.TestCase):
             'remont-kvartir-pod-klyuch.html',
             'kapitalnyy-remont-kvartir.html',
             'dizayn-i-remont-kvartiry.html',
+            'remont-kvartir-v-novostroyke.html',
+            'kosmeticheskiy-remont-kvartir.html',
         ]:
             with self.subTest(filename=filename):
                 page = (HTML.parent / filename).read_text(encoding='utf-8')
@@ -414,6 +470,8 @@ class ContactPolishTests(unittest.TestCase):
         self.assertIn('<loc>https://damalastroy.ru/remont-kvartir-pod-klyuch.html</loc>', sitemap_text)
         self.assertIn('<loc>https://damalastroy.ru/kapitalnyy-remont-kvartir.html</loc>', sitemap_text)
         self.assertIn('<loc>https://damalastroy.ru/dizayn-i-remont-kvartiry.html</loc>', sitemap_text)
+        self.assertIn('<loc>https://damalastroy.ru/remont-kvartir-v-novostroyke.html</loc>', sitemap_text)
+        self.assertIn('<loc>https://damalastroy.ru/kosmeticheskiy-remont-kvartir.html</loc>', sitemap_text)
         self.assertIn('<lastmod>2026-05-24</lastmod>', sitemap_text)
         self.assertIn('Sitemap: https://damalastroy.ru/sitemap.xml', robots.read_text(encoding='utf-8'))
         self.assertIn('Allow: /', robots.read_text(encoding='utf-8'))
