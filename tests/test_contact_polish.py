@@ -106,12 +106,12 @@ class ContactPolishTests(unittest.TestCase):
     def test_seo_meta_tags_target_krasnodar_repair_core(self):
         html = self.page()
         self.assertIn('<title>Ремонт квартир под ключ в Краснодаре — цена от 14 000 ₽/м² | DAMALA STROY</title>', html)
-        self.assertIn('<meta name="description" content="Ремонт квартир под ключ в Краснодаре: новостройки, капитальный и косметический ремонт. Смета до старта, договор, гарантия. Цена от 14 000 ₽/м²." />', html)
-        self.assertIn('<meta name="keywords" content="ремонт квартир под ключ Краснодар, ремонт квартир Краснодар цена за м2, ремонт квартиры в новостройке Краснодар, капитальный ремонт квартир Краснодар, косметический ремонт квартир Краснодар, ремонт домов под ключ Краснодар, дизайнерский ремонт квартиры Краснодар" />', html)
+        self.assertIn('<meta name="description" content="Ремонт квартир под ключ в Краснодаре: цена от 14 000 ₽/м², смета до старта, договор, гарантия, ремонт с материалами и без предоплаты." />', html)
+        self.assertIn('<meta name="keywords" content="ремонт квартир под ключ Краснодар, ремонт квартир Краснодар цена за м2, ремонт квартиры под ключ цена Краснодар, ремонт квартиры с материалами Краснодар, ремонт квартир без предоплаты Краснодар, ремонт квартиры в новостройке Краснодар, капитальный ремонт квартир Краснодар" />', html)
         self.assertIn('<meta name="geo.placename" content="Краснодар" />', html)
         self.assertIn('<link rel="canonical" href="https://damalastroy.ru/" />', html)
         self.assertIn('<meta property="og:title" content="Ремонт квартир под ключ в Краснодаре — DAMALA STROY" />', html)
-        self.assertIn('<meta property="og:description" content="Ремонт квартир под ключ в Краснодаре: новостройки, капитальный и косметический ремонт, смета до старта, договор и гарантия." />', html)
+        self.assertIn('<meta property="og:description" content="Ремонт квартир под ключ в Краснодаре: цена от 14 000 ₽/м², смета до старта, договор, гарантия и работа без предоплаты." />', html)
 
     def test_visible_seo_headings_keep_design_structure(self):
         html = self.page()
@@ -138,6 +138,43 @@ class ContactPolishTests(unittest.TestCase):
         self.assertIn('Ремонт квартир в новостройке в Краснодаре', offer_names)
         self.assertIn('Капитальный ремонт квартир в Краснодаре', offer_names)
 
+
+
+    def test_main_page_seo_copy_mentions_price_trust_and_no_prepayment(self):
+        html = self.page()
+        self.assertIn('без предоплаты', html)
+        self.assertIn('ремонт с материалами', html)
+        self.assertIn('цена за м²', html)
+        self.assertIn('гарантия по договору', html)
+        self.assertIn('href="/tseny-na-remont-kvartir.html"', html)
+
+    def test_prices_page_exists_with_commercial_seo_core(self):
+        root = HTML.parent
+        price_path = root / 'tseny-na-remont-kvartir.html'
+        self.assertTrue(price_path.exists())
+        page = price_path.read_text(encoding='utf-8')
+        self.assertIn('<title>Цены на ремонт квартир в Краснодаре — от 14 000 ₽/м² | DAMALA STROY</title>', page)
+        self.assertIn('<h1>Цены на ремонт квартир в Краснодаре</h1>', page)
+        self.assertIn('ремонт квартир под ключ цена', page)
+        self.assertIn('ремонт квартиры под ключ цена за м2', page)
+        self.assertIn('без предоплаты', page)
+        self.assertIn('ремонт квартиры с материалами', page)
+        self.assertIn('гарантия по договору', page)
+        self.assertIn('Start', page)
+        self.assertIn('Comfort', page)
+        self.assertIn('Design', page)
+
+    def test_prices_page_structured_data_exists(self):
+        price_html = (HTML.parent / 'tseny-na-remont-kvartir.html').read_text(encoding='utf-8')
+        scripts = re.findall(r'<script type="application/ld\+json">\s*(.*?)\s*</script>', price_html, re.S)
+        data = [json.loads(script) for script in scripts]
+        service = next((item for item in data if item.get('@type') == 'Service'), None)
+        self.assertIsNotNone(service)
+        self.assertEqual(service['name'], 'Цены на ремонт квартир в Краснодаре')
+        offers = service['offers']['offers']
+        self.assertEqual(len(offers), 3)
+        prices = {offer['price'] for offer in offers}
+        self.assertEqual(prices, {14000, 18000, 22000})
 
     def test_seo_faq_is_separate_page_without_main_landing_block(self):
         root = HTML.parent
@@ -206,7 +243,7 @@ class ContactPolishTests(unittest.TestCase):
     def test_visible_copy_uses_client_oriented_seo_language(self):
         html = self.page()
         self.assertIn('ремонт квартир под ключ в Краснодаре', html)
-        self.assertIn('понятной ценой за м²', html)
+        self.assertIn('цена за м² фиксируется', html)
         self.assertIn('дом под ключ в Краснодаре', html)
         self.assertIn('замер, смета, договор, контроль работ', html)
         self.assertIn('расчёт стоимости ремонта, сроки и варианты отделки', html)
@@ -225,7 +262,8 @@ class ContactPolishTests(unittest.TestCase):
         sitemap_text = sitemap.read_text(encoding='utf-8')
         self.assertIn('<loc>https://damalastroy.ru/</loc>', sitemap_text)
         self.assertIn('<loc>https://damalastroy.ru/faq.html</loc>', sitemap_text)
-        self.assertIn('<lastmod>2026-05-23</lastmod>', sitemap_text)
+        self.assertIn('<loc>https://damalastroy.ru/tseny-na-remont-kvartir.html</loc>', sitemap_text)
+        self.assertIn('<lastmod>2026-05-24</lastmod>', sitemap_text)
         self.assertIn('Sitemap: https://damalastroy.ru/sitemap.xml', robots.read_text(encoding='utf-8'))
         self.assertIn('Allow: /', robots.read_text(encoding='utf-8'))
 
