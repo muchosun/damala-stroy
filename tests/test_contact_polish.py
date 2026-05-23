@@ -311,6 +311,31 @@ class ContactPolishTests(unittest.TestCase):
         self.assertNotIn('Клиенту важно не только красиво', html)
         self.assertNotIn('Оставьте контакты, площадь и уровень ремонта', html)
 
+
+    def test_public_pages_do_not_expose_internal_seo_notes(self):
+        forbidden_phrases = [
+            'Страница закрывает',
+            'страница закрывает',
+            'Эта страница создана под',
+            'коммерческие запросы',
+            'основной коммерческий запрос',
+            'близкие формулировки',
+            'Для каких объектов подходит',
+            'Клиент заранее понимает',
+            'спокойствия клиента',
+        ]
+        for filename in [
+            'index.html',
+            'faq.html',
+            'tseny-na-remont-kvartir.html',
+            'remont-kvartir-pod-klyuch.html',
+            'kapitalnyy-remont-kvartir.html',
+        ]:
+            with self.subTest(filename=filename):
+                page = (HTML.parent / filename).read_text(encoding='utf-8')
+                for phrase in forbidden_phrases:
+                    self.assertNotIn(phrase, page)
+
     def test_sitemap_and_robots_are_configured(self):
         root = HTML.parent
         sitemap = root / 'sitemap.xml'
