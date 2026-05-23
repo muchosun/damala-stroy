@@ -25,6 +25,7 @@
   <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=20260520" />
   <link rel="mask-icon" href="/safari-pinned-tab.svg?v=20260520" color="#d7a85f" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20260520" />
+  <link rel="preload" as="image" href="/assets/images/renovation/damala-renovation-living-room.webp" type="image/webp" />
   <link rel="manifest" href="/site.webmanifest?v=20260520" />
   <script type="application/ld+json">
   {
@@ -214,18 +215,14 @@
     .photo-main {
       position: absolute; inset: 0 0 85px 38px; border-radius: 42px;
       background-image:
-        linear-gradient(180deg, rgba(0,0,0,.1), rgba(0,0,0,.58)),
+        linear-gradient(180deg, rgba(0,0,0,.04), rgba(0,0,0,.28)),
         image-set(
           url('/assets/images/renovation/damala-renovation-living-room.webp') type('image/webp'),
           url('/assets/images/renovation/damala-renovation-living-room.jpg') type('image/jpeg')
         );
       background-position: center;
       background-size: cover;
-      border: 1px solid var(--white-line);
       box-shadow: 0 34px 100px rgba(0,0,0,.55);
-    }
-    .photo-main:before {
-      content:""; position:absolute; inset: 20px; border:1px solid rgba(255,255,255,.16); border-radius: 30px; pointer-events:none;
     }
     .hero-badge {
       position: absolute; left: 0; bottom: 18px; width: 360px;
@@ -266,9 +263,9 @@
     .step p { color: var(--muted); line-height:1.5; margin:0; }
 
     .portfolio { display:grid; grid-template-columns: 1.2fr .8fr; gap: 18px; }
-    .work { min-height: 420px; border-radius: 34px; overflow:hidden; border:1px solid var(--white-line); background-size:cover; background-position:center; position:relative; }
+    .work { min-height: 420px; border-radius: 34px; overflow:hidden; background-size:cover; background-position:center; position:relative; box-shadow: inset 0 0 0 1px rgba(255,255,255,.06), 0 28px 80px rgba(0,0,0,.34); }
     .work.small { min-height: 201px; }
-    .work:after { content:""; position:absolute; inset:0; background: linear-gradient(180deg, transparent, rgba(0,0,0,.76)); }
+    .work:after { content:""; position:absolute; inset:0; background: linear-gradient(180deg, rgba(0,0,0,0) 46%, rgba(0,0,0,.72) 100%); }
     .work-info { position:absolute; left:24px; right:24px; bottom:22px; z-index:2; display:flex; justify-content:space-between; gap:18px; align-items:end; }
     .work-info b { font-size: 25px; }
     .work-info span { color: var(--gold-2); font-weight:800; }
@@ -454,7 +451,7 @@
       <div class="page">
         <div class="section-head">
           <h2>Пакеты ремонта<br>в Краснодаре</h2>
-          <p>Пакеты помогают заранее выбрать формат ремонта квартиры или дома в Краснодаре: от базовой отделки до дизайнерского решения. цена за м² фиксируется в смете до начала работ.</p>
+          <p>Выполняем ремонт квартир под ключ в Краснодаре в трёх форматах: базовая отделка, стандартный ремонт и дизайн-ремонт, цена за м² фиксируется в смете до начала работ.</p>
         </div>
         <div class="cards">
           <article class="tariff">
@@ -501,19 +498,19 @@
       <div class="page">
         <div class="section-head">
           <h2>Ремонт квартир<br>и домов</h2>
-          <p>Показываем аккуратную отделку и реальные сценарии: ремонт квартиры под сдачу, семейный ремонт в новостройке и дом под ключ в Краснодаре.</p>
+          <p>Ремонт квартир и домов под ключ в Краснодаре: ремонт квартир под сдачу, ремонт домов под ключ, ремонт в новостройке, капитальный ремонт и отделка с материалами. Смета до старта, договор и сроки фиксируются перед началом работ.</p>
         </div>
         <div class="portfolio">
           <article class="work work-1">
-            <div class="work-info"><b>Квартира под сдачу</b><span>52 м²</span></div>
+            <div class="work-info"><b>Кухня-гостиная</b><span>52 м²</span></div>
           </article>
           <div>
             <article class="work small work-2">
-              <div class="work-info"><b>Семейный стандарт</b><span>80 м²</span></div>
+              <div class="work-info"><b>Ремонт санузла</b><span>80 м²</span></div>
             </article>
             <div style="height:18px"></div>
             <article class="work small work-3">
-              <div class="work-info"><b>Дом под ключ</b><span>125 м²</span></div>
+              <div class="work-info"><b>Черновая отделка</b><span>125 м²</span></div>
             </article>
           </div>
         </div>
@@ -524,7 +521,7 @@
       <div class="page">
         <div class="section-head">
           <h2>Ремонт по договору</h2>
-          <p>Процесс строим прозрачно: замер, смета, договор, контроль работ, ремонт с материалами, отчёты и финальная сдача без сюрпризов.</p>
+          <p>Работаем по договору: замер, смета, контроль этапов, ремонт с материалами, отчёты и финальная сдача объекта.</p>
         </div>
         <div class="process">
           <div class="step"><div class="num">01</div><h3>Замер</h3><p>Оцениваем состояние квартиры, замеряем площади и фиксируем пожелания по ремонту.</p></div>
@@ -542,7 +539,7 @@
           <div>
             <div class="eyebrow">быстрый расчёт</div>
             <h2>Смета ремонта в 3 вариантах</h2>
-            <p>Укажите площадь, город и желаемый пакет ремонта. Мы подготовим расчёт стоимости ремонта, сроки и варианты отделки под ваш бюджет.</p>
+            <p>Укажите площадь, город и желаемый пакет ремонта. Подготовим расчёт стоимости ремонта, сроки и варианты отделки для квартиры или дома.</p>
           </div>
           <form class="form" id="quote-form">
             <input type="text" name="clientName" placeholder="Ваше имя" autocomplete="name" />

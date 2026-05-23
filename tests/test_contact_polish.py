@@ -328,6 +328,24 @@ class ContactPolishTests(unittest.TestCase):
         self.assertIn('"src": "/android-chrome-512x512.png"', manifest)
 
 
+
+    def test_portfolio_copy_is_client_facing_seo_not_internal_explanation(self):
+        html = self.page()
+        self.assertIn('Ремонт квартир и домов под ключ в Краснодаре', html)
+        self.assertIn('ремонт квартир под ключ', html)
+        self.assertIn('ремонт домов под ключ', html)
+        self.assertIn('ремонт с материалами', html)
+        self.assertIn('смета до старта', html)
+        self.assertNotIn('Показываем аккуратную отделку', html)
+        self.assertNotIn('реальные сценарии', html)
+
+    def test_renovation_images_are_not_over_darkened_or_framed(self):
+        html = self.page()
+        self.assertIn('linear-gradient(180deg, rgba(0,0,0,.04), rgba(0,0,0,.28))', html)
+        self.assertIn('linear-gradient(180deg, rgba(0,0,0,0) 46%, rgba(0,0,0,.72) 100%)', html)
+        self.assertNotIn('.photo-main:before', html)
+        self.assertNotIn('.work { min-height: 420px; border-radius: 34px; overflow:hidden; border:1px solid var(--white-line);', html)
+
     def test_main_page_uses_local_renovation_images(self):
         html = self.page()
         root = HTML.parent
@@ -347,9 +365,10 @@ class ContactPolishTests(unittest.TestCase):
         html = self.page()
         self.assertIn('ремонт квартир под ключ в Краснодаре', html)
         self.assertIn('цена за м² фиксируется', html)
-        self.assertIn('дом под ключ в Краснодаре', html)
-        self.assertIn('замер, смета, договор, контроль работ', html)
+        self.assertIn('ремонт домов под ключ', html)
+        self.assertIn('замер, смета, контроль этапов', html)
         self.assertIn('расчёт стоимости ремонта, сроки и варианты отделки', html)
+        self.assertNotIn('без сюрпризов', html)
         self.assertNotIn('без хаоса для клиента', html)
         self.assertNotIn('Линейка сделана так', html)
         self.assertNotIn('Вместо перегруженной листовки', html)
