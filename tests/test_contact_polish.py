@@ -327,6 +327,22 @@ class ContactPolishTests(unittest.TestCase):
         self.assertIn('"src": "/android-chrome-192x192.png"', manifest)
         self.assertIn('"src": "/android-chrome-512x512.png"', manifest)
 
+
+    def test_main_page_uses_local_renovation_images(self):
+        html = self.page()
+        root = HTML.parent
+        expected_images = [
+            '/assets/images/renovation/damala-renovation-living-room.webp',
+            '/assets/images/renovation/damala-renovation-kitchen.webp',
+            '/assets/images/renovation/damala-renovation-bathroom.webp',
+            '/assets/images/renovation/damala-renovation-rough-stage.webp',
+        ]
+        for image_url in expected_images:
+            self.assertIn(image_url, html)
+            self.assertTrue((root / image_url.lstrip('/')).exists(), image_url)
+            self.assertTrue((root / image_url.lstrip('/').replace('.webp', '.jpg')).exists(), image_url)
+        self.assertNotIn('images.unsplash.com', html)
+
     def test_visible_copy_uses_client_oriented_seo_language(self):
         html = self.page()
         self.assertIn('ремонт квартир под ключ в Краснодаре', html)

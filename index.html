@@ -213,9 +213,14 @@
     .hero-media { position: relative; min-height: 630px; }
     .photo-main {
       position: absolute; inset: 0 0 85px 38px; border-radius: 42px;
-      background:
+      background-image:
         linear-gradient(180deg, rgba(0,0,0,.1), rgba(0,0,0,.58)),
-        url('https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1400&q=85') center/cover;
+        image-set(
+          url('/assets/images/renovation/damala-renovation-living-room.webp') type('image/webp'),
+          url('/assets/images/renovation/damala-renovation-living-room.jpg') type('image/jpeg')
+        );
+      background-position: center;
+      background-size: cover;
       border: 1px solid var(--white-line);
       box-shadow: 0 34px 100px rgba(0,0,0,.55);
     }
@@ -267,9 +272,24 @@
     .work-info { position:absolute; left:24px; right:24px; bottom:22px; z-index:2; display:flex; justify-content:space-between; gap:18px; align-items:end; }
     .work-info b { font-size: 25px; }
     .work-info span { color: var(--gold-2); font-weight:800; }
-    .work-1 { background-image: url('https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1200&q=85'); }
-    .work-2 { background-image: url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=900&q=85'); }
-    .work-3 { background-image: url('https://images.unsplash.com/photo-1600210491892-03d54c0aaf87?auto=format&fit=crop&w=900&q=85'); }
+    .work-1 {
+      background-image: image-set(
+        url('/assets/images/renovation/damala-renovation-kitchen.webp') type('image/webp'),
+        url('/assets/images/renovation/damala-renovation-kitchen.jpg') type('image/jpeg')
+      );
+    }
+    .work-2 {
+      background-image: image-set(
+        url('/assets/images/renovation/damala-renovation-bathroom.webp') type('image/webp'),
+        url('/assets/images/renovation/damala-renovation-bathroom.jpg') type('image/jpeg')
+      );
+    }
+    .work-3 {
+      background-image: image-set(
+        url('/assets/images/renovation/damala-renovation-rough-stage.webp') type('image/webp'),
+        url('/assets/images/renovation/damala-renovation-rough-stage.jpg') type('image/jpeg')
+      );
+    }
 
     .offer {
       display:grid; grid-template-columns: .9fr 1.1fr; gap: 28px; align-items:center;
