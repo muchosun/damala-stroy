@@ -1,3 +1,5 @@
+import json
+import re
 import unittest
 from pathlib import Path
 
@@ -104,12 +106,37 @@ class ContactPolishTests(unittest.TestCase):
     def test_seo_meta_tags_target_krasnodar_repair_core(self):
         html = self.page()
         self.assertIn('<title>Ремонт квартир под ключ в Краснодаре — цена от 14 000 ₽/м² | DAMALA STROY</title>', html)
-        self.assertIn('<meta name="description" content="Ремонт квартир и домов под ключ в Краснодаре от DAMALA STROY: фиксированная смета, договор, гарантия, замер и клининг. Цены от 14 000 ₽/м²." />', html)
-        self.assertIn('<meta name="keywords" content="ремонт квартир под ключ Краснодар, ремонт под ключ Краснодар, ремонт квартир Краснодар цена за м2, ремонт квартиры в новостройке Краснодар, дизайнерский ремонт квартиры Краснодар, косметический ремонт Краснодар, капитальный ремонт квартиры Краснодар" />', html)
+        self.assertIn('<meta name="description" content="Ремонт квартир под ключ в Краснодаре: новостройки, капитальный и косметический ремонт. Смета до старта, договор, гарантия. Цена от 14 000 ₽/м²." />', html)
+        self.assertIn('<meta name="keywords" content="ремонт квартир под ключ Краснодар, ремонт квартир Краснодар цена за м2, ремонт квартиры в новостройке Краснодар, капитальный ремонт квартир Краснодар, косметический ремонт квартир Краснодар, ремонт домов под ключ Краснодар, дизайнерский ремонт квартиры Краснодар" />', html)
         self.assertIn('<meta name="geo.placename" content="Краснодар" />', html)
         self.assertIn('<link rel="canonical" href="https://damalastroy.ru/" />', html)
         self.assertIn('<meta property="og:title" content="Ремонт квартир под ключ в Краснодаре — DAMALA STROY" />', html)
-        self.assertIn('<meta property="og:description" content="Ремонт квартир и домов под ключ в Краснодаре: фиксированная смета, договор, гарантия, замер и клининг. Цены от 14 000 ₽/м²." />', html)
+        self.assertIn('<meta property="og:description" content="Ремонт квартир под ключ в Краснодаре: новостройки, капитальный и косметический ремонт, смета до старта, договор и гарантия." />', html)
+
+    def test_visible_seo_headings_keep_design_structure(self):
+        html = self.page()
+        self.assertIn('<h1>Ремонт квартир<br><span>под ключ</span></h1>', html)
+        self.assertIn('<h2>Пакеты ремонта<br>в Краснодаре</h2>', html)
+        self.assertIn('<h2>Ремонт квартир<br>и домов</h2>', html)
+        self.assertIn('<h2>Ремонт по договору</h2>', html)
+        self.assertIn('<h2>Смета ремонта в 3 вариантах</h2>', html)
+
+    def test_local_business_structured_data_exists(self):
+        html = self.page()
+        match = re.search(r'<script type="application/ld\+json">\s*(.*?)\s*</script>', html, re.S)
+        self.assertIsNotNone(match)
+        data = json.loads(match.group(1))
+        self.assertEqual(data['@context'], 'https://schema.org')
+        self.assertEqual(data['@type'], 'HomeAndConstructionBusiness')
+        self.assertEqual(data['@id'], 'https://damalastroy.ru/#business')
+        self.assertEqual(data['name'], 'DAMALA STROY')
+        self.assertEqual(data['telephone'], '+79181792703')
+        self.assertEqual(data['address']['addressLocality'], 'Краснодар')
+        self.assertIn('Краснодар', data['areaServed'][0]['name'])
+        offer_names = {offer['name'] for offer in data['makesOffer']}
+        self.assertIn('Ремонт квартир под ключ в Краснодаре', offer_names)
+        self.assertIn('Ремонт квартир в новостройке в Краснодаре', offer_names)
+        self.assertIn('Капитальный ремонт квартир в Краснодаре', offer_names)
 
     def test_favicon_is_configured(self):
         html = self.page()
@@ -151,7 +178,7 @@ class ContactPolishTests(unittest.TestCase):
         self.assertIn('понятной ценой за м²', html)
         self.assertIn('дом под ключ в Краснодаре', html)
         self.assertIn('замер, смета, договор, контроль работ', html)
-        self.assertIn('расчёт стоимости, сроки и варианты отделки', html)
+        self.assertIn('расчёт стоимости ремонта, сроки и варианты отделки', html)
         self.assertNotIn('без хаоса для клиента', html)
         self.assertNotIn('Линейка сделана так', html)
         self.assertNotIn('Вместо перегруженной листовки', html)
