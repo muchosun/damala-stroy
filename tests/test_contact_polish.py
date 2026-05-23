@@ -140,6 +140,33 @@ class ContactPolishTests(unittest.TestCase):
 
 
 
+
+    def test_turnkey_repair_page_exists_with_main_p1_core(self):
+        root = HTML.parent
+        page_path = root / 'remont-kvartir-pod-klyuch.html'
+        self.assertTrue(page_path.exists())
+        page = page_path.read_text(encoding='utf-8')
+        self.assertIn('<title>Ремонт квартир под ключ в Краснодаре | DAMALA STROY</title>', page)
+        self.assertIn('<h1>Ремонт квартир под ключ в Краснодаре</h1>', page)
+        self.assertIn('ремонт квартиры под ключ', page)
+        self.assertIn('ремонт под ключ', page)
+        self.assertIn('ремонт квартир с материалами', page)
+        self.assertIn('без предоплаты', page)
+        self.assertIn('гарантия по договору', page)
+        self.assertIn('смета до старта', page)
+        self.assertIn('href="/tseny-na-remont-kvartir.html"', page)
+
+    def test_turnkey_repair_page_structured_data_exists(self):
+        page_html = (HTML.parent / 'remont-kvartir-pod-klyuch.html').read_text(encoding='utf-8')
+        scripts = re.findall(r'<script type="application/ld\+json">\s*(.*?)\s*</script>', page_html, re.S)
+        data = [json.loads(script) for script in scripts]
+        service = next((item for item in data if item.get('@type') == 'Service'), None)
+        self.assertIsNotNone(service)
+        self.assertEqual(service['name'], 'Ремонт квартир под ключ в Краснодаре')
+        self.assertEqual(service['provider']['@id'], 'https://damalastroy.ru/#business')
+        self.assertEqual(service['areaServed']['name'], 'Краснодар')
+        self.assertEqual(service['offers']['lowPrice'], 14000)
+
     def test_main_page_seo_copy_mentions_price_trust_and_no_prepayment(self):
         html = self.page()
         self.assertIn('без предоплаты', html)
@@ -263,6 +290,7 @@ class ContactPolishTests(unittest.TestCase):
         self.assertIn('<loc>https://damalastroy.ru/</loc>', sitemap_text)
         self.assertIn('<loc>https://damalastroy.ru/faq.html</loc>', sitemap_text)
         self.assertIn('<loc>https://damalastroy.ru/tseny-na-remont-kvartir.html</loc>', sitemap_text)
+        self.assertIn('<loc>https://damalastroy.ru/remont-kvartir-pod-klyuch.html</loc>', sitemap_text)
         self.assertIn('<lastmod>2026-05-24</lastmod>', sitemap_text)
         self.assertIn('Sitemap: https://damalastroy.ru/sitemap.xml', robots.read_text(encoding='utf-8'))
         self.assertIn('Allow: /', robots.read_text(encoding='utf-8'))
