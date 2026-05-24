@@ -476,6 +476,70 @@ class ContactPolishTests(unittest.TestCase):
         self.assertIn('Sitemap: https://damalastroy.ru/sitemap.xml', robots.read_text(encoding='utf-8'))
         self.assertIn('Allow: /', robots.read_text(encoding='utf-8'))
 
+
+    def test_contacts_page_exists_with_local_trust_signals(self):
+        root = HTML.parent
+        page_path = root / 'kontakty.html'
+        self.assertTrue(page_path.exists())
+        page = page_path.read_text(encoding='utf-8')
+        self.assertIn('<title>Контакты DAMALA STROY в Краснодаре</title>', page)
+        self.assertIn('<h1>Контакты DAMALA STROY в Краснодаре</h1>', page)
+        self.assertIn('ул. Ивана Беличенко, 95, корп. 1', page)
+        self.assertIn('+7 (918) 179-27-03', page)
+        self.assertIn('Круглосуточно', page)
+        self.assertIn('Строительные и отделочные работы', page)
+        self.assertIn('6 отзывов на Яндекс.Картах', page)
+        self.assertIn('https://yandex.ru/maps/org/damala/108539376694/', page)
+        self.assertIn('href="/remont-kvartir-pod-klyuch.html"', page)
+        self.assertIn('href="/tseny-na-remont-kvartir.html"', page)
+
+    def test_contacts_page_structured_data_exists(self):
+        page_html = (HTML.parent / 'kontakty.html').read_text(encoding='utf-8')
+        scripts = re.findall(r'<script type="application/ld\+json">\s*(.*?)\s*</script>', page_html, re.S)
+        data = [json.loads(script) for script in scripts]
+        business = next((item for item in data if item.get('@type') == 'HomeAndConstructionBusiness'), None)
+        self.assertIsNotNone(business)
+        self.assertEqual(business['name'], 'DAMALA STROY')
+        self.assertEqual(business['telephone'], '+79181792703')
+        self.assertEqual(business['address']['streetAddress'], 'ул. Ивана Беличенко, 95, корп. 1')
+        self.assertIn('https://yandex.ru/maps/org/damala/108539376694/', business['sameAs'])
+
+    def test_local_business_schema_links_yandex_business_card(self):
+        html = self.page()
+        match = re.search(r'<script type="application/ld\+json">\s*(.*?)\s*</script>', html, re.S)
+        self.assertIsNotNone(match)
+        data = json.loads(match.group(1))
+        self.assertEqual(data['address']['streetAddress'], 'ул. Ивана Беличенко, 95, корп. 1')
+        self.assertIn('https://yandex.ru/maps/org/damala/108539376694/', data['sameAs'])
+        self.assertIn('href="/kontakty.html"', html)
+        self.assertIn('6 отзывов на Яндекс.Картах', html)
+
+    def test_service_pages_have_cross_linking_block(self):
+        service_pages = [
+            'remont-kvartir-pod-klyuch.html',
+            'tseny-na-remont-kvartir.html',
+            'remont-kvartir-v-novostroyke.html',
+            'kosmeticheskiy-remont-kvartir.html',
+            'kapitalnyy-remont-kvartir.html',
+            'dizayn-i-remont-kvartiry.html',
+            'faq.html',
+        ]
+        required_links = [
+            'href="/remont-kvartir-pod-klyuch.html"',
+            'href="/tseny-na-remont-kvartir.html"',
+            'href="/remont-kvartir-v-novostroyke.html"',
+            'href="/kosmeticheskiy-remont-kvartir.html"',
+            'href="/kapitalnyy-remont-kvartir.html"',
+            'href="/dizayn-i-remont-kvartiry.html"',
+            'href="/kontakty.html"',
+        ]
+        for filename in service_pages:
+            with self.subTest(filename=filename):
+                page = (HTML.parent / filename).read_text(encoding='utf-8')
+                self.assertIn('Другие услуги DAMALA STROY', page)
+                for link in required_links:
+                    self.assertIn(link, page)
+
     def test_legal_documents_and_links_exist(self):
         root = HTML.parent
         html = self.page()
